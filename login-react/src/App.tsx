@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
 import "./App.css";
 import Button from "./components/Button";
 import Input from "./components/Input";
@@ -27,7 +27,8 @@ function App() {
     if (form) form["username"].focus();
   }, []);
 
-  function handleChange(e: any) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    //제네릭을 통해 name,value의 타겟(이벤트 타겟)의 타입을 정함
     const { name, value } = e.target;
     const nextValues = {
       ...values,
@@ -36,7 +37,12 @@ function App() {
     setValues(nextValues);
   }
 
-  function handleClick(e: any) {
+  function handleClick(e: MouseEvent) {
+    // 만약 해당 컴포넌트 처럼 MouseEvent의 속성을 딱히 활용하고 있지도 않고 타입을 정리하기 귀찮을때는
+    // 리엑트에서 제공하는 보편적인 타입인 SyntheticEvent라는 타입을 사용
+    //SyntheticEvent는 리액트 이벤트 객체에 조상격인 타입으로 리액트에서는 브라우저 기본 이벤트를 그대로 쓰는게 아니라
+    // 리액트에서 추가적인 기능을 덧붙인 객체를 사용하기 때문에 SyntheticEvent라는 이벤트 객체 타입을 쓴다
+    //SyntheticEvent는 특별히 이벤트를 구체적으로 지정하지 않아도 괜찮은 경우에는 SyntheticEvent를 쓸 수 있다
     e.preventDefault();
 
     const message = `${values.username}님 환영합니다`;
